@@ -54,43 +54,31 @@ export default function Home() {
   }
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#0b0b0b",
-        color: "white",
-        padding: "24px",
-      }}
-    >
-      <div style={{ maxWidth: "680px", margin: "0 auto" }}>
-        <header style={{ marginBottom: "24px" }}>
-          <h1 style={{ fontSize: "30px", marginBottom: "8px" }}>
-            ひとり飯ナビ
-          </h1>
-          <p style={{ color: "#aaa", lineHeight: "1.6" }}>
-            一人暮らしの「今日どこで食べる？」を10秒で解決。
-          </p>
+    <main style={styles.page}>
+      <div style={styles.app}>
+        <header style={styles.header}>
+          <div>
+            <p style={styles.label}>SOLO FOOD APP</p>
+            <h1 style={styles.title}>ひとり飯ナビ</h1>
+            <p style={styles.subtitle}>
+              一人暮らしの「今日どこで食べる？」を10秒で解決。
+            </p>
+          </div>
         </header>
 
-        <section
-          style={{
-            background: "#151515",
-            border: "1px solid #2a2a2a",
-            borderRadius: "16px",
-            padding: "16px",
-            marginBottom: "20px",
-          }}
-        >
-          <div style={{ display: "grid", gap: "10px" }}>
-            <select value={area} onChange={(e) => setArea(e.target.value)} style={selectStyle}>
-              <option value="">エリアを選択</option>
+        <section style={styles.searchBox}>
+          <div style={styles.searchTitle}>条件で探す</div>
+
+          <div style={styles.grid}>
+            <select value={area} onChange={(e) => setArea(e.target.value)} style={styles.select}>
+              <option value="">エリア</option>
               <option value="新宿">新宿</option>
               <option value="池袋">池袋</option>
               <option value="渋谷">渋谷</option>
             </select>
 
-            <select value={genre} onChange={(e) => setGenre(e.target.value)} style={selectStyle}>
-              <option value="">ジャンルを選択</option>
+            <select value={genre} onChange={(e) => setGenre(e.target.value)} style={styles.select}>
+              <option value="">ジャンル</option>
               <option value="牛丼">牛丼</option>
               <option value="そば">そば</option>
               <option value="定食">定食</option>
@@ -98,131 +86,305 @@ export default function Home() {
               <option value="中華">中華</option>
             </select>
 
-            <select value={budget} onChange={(e) => setBudget(e.target.value)} style={selectStyle}>
-              <option value="">予算を選択</option>
+            <select value={budget} onChange={(e) => setBudget(e.target.value)} style={styles.select}>
+              <option value="">予算</option>
               <option value="800">〜800円</option>
               <option value="1000">〜1,000円</option>
               <option value="1500">〜1,500円</option>
               <option value="2000">〜2,000円</option>
             </select>
 
-            <select value={score} onChange={(e) => setScore(e.target.value)} style={selectStyle}>
-              <option value="">一人向けスコアを選択</option>
+            <select value={score} onChange={(e) => setScore(e.target.value)} style={styles.select}>
+              <option value="">スコア</option>
               <option value="80">80点以上</option>
               <option value="90">90点以上</option>
             </select>
-
-            <button onClick={resetFilters} style={resetButtonStyle}>
-              条件をリセット
-            </button>
           </div>
+
+          <button onClick={resetFilters} style={styles.resetButton}>
+            条件をリセット
+          </button>
         </section>
 
-        <p style={{ marginBottom: "14px", color: "#ddd" }}>
-          検索結果：<strong>{restaurants.length}</strong>件
-        </p>
+        <section style={styles.resultHeader}>
+          <div>
+            <p style={styles.resultLabel}>検索結果</p>
+            <h2 style={styles.resultCount}>{restaurants.length}件</h2>
+          </div>
+          <div style={styles.sortBadge}>スコア順</div>
+        </section>
 
         {restaurants.length === 0 && (
-          <div
-            style={{
-              background: "#151515",
-              border: "1px solid #333",
-              borderRadius: "14px",
-              padding: "20px",
-              color: "#aaa",
-            }}
-          >
+          <div style={styles.empty}>
             条件に合う店舗がありません。条件を変えて検索してください。
           </div>
         )}
 
-        {restaurants.map((shop) => (
-          <article
-            key={shop.id}
-            style={{
-              background: "#151515",
-              border: "1px solid #2a2a2a",
-              borderRadius: "18px",
-              padding: "18px",
-              marginBottom: "16px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                gap: "12px",
-                alignItems: "flex-start",
-              }}
-            >
-              <div>
-                <h2 style={{ fontSize: "20px", marginBottom: "8px" }}>
-                  {shop.name}
-                </h2>
-                <p style={{ color: "#aaa" }}>
-                  📍 {shop.area} / 🍜 {shop.genre}
-                </p>
+        <div style={styles.list}>
+          {restaurants.map((shop) => (
+            <article key={shop.id} style={styles.card}>
+              <div style={styles.cardTop}>
+                <div>
+                  <div style={styles.tags}>
+                    <span style={styles.tag}>{shop.area}</span>
+                    <span style={styles.tag}>{shop.genre}</span>
+                  </div>
+                  <h3 style={styles.shopName}>{shop.name}</h3>
+                </div>
+
+                <div style={styles.score}>
+                  <span style={styles.scoreNumber}>{shop.solo_score}</span>
+                  <span style={styles.scoreText}>点</span>
+                </div>
               </div>
 
-              <div
-                style={{
-                  background: "#16a34a",
-                  color: "white",
-                  borderRadius: "999px",
-                  padding: "8px 10px",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
+              <div style={styles.infoRow}>
+                <span>💰</span>
+                <span>
+                  {shop.price_min}円〜{shop.price_max}円
+                </span>
+              </div>
+
+              <p style={styles.reason}>{shop.solo_reason}</p>
+
+              <a
+                href={shop.google_maps_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={styles.mapButton}
               >
-                {shop.solo_score}点
-              </div>
-            </div>
+                Googleマップで見る
+              </a>
+            </article>
+          ))}
+        </div>
 
-            <div style={{ marginTop: "14px", lineHeight: "1.8" }}>
-              <p>💰 {shop.price_min}円〜{shop.price_max}円</p>
-              <p style={{ color: "#bbb" }}>{shop.solo_reason}</p>
-            </div>
-
-            <a
-              href={shop.google_maps_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "block",
-                marginTop: "16px",
-                textAlign: "center",
-                padding: "12px",
-                background: "#2563eb",
-                color: "white",
-                borderRadius: "12px",
-                textDecoration: "none",
-                fontWeight: "bold",
-              }}
-            >
-              Googleマップで見る
-            </a>
-          </article>
-        ))}
+        <nav style={styles.bottomNav}>
+          <div style={styles.navItemActive}>🏠<span>探す</span></div>
+          <div style={styles.navItem}>⭐<span>保存</span></div>
+          <div style={styles.navItem}>🗺️<span>地図</span></div>
+        </nav>
       </div>
     </main>
   );
 }
 
-const selectStyle: React.CSSProperties = {
-  padding: "12px",
-  borderRadius: "10px",
-  border: "1px solid #333",
-  background: "#0f0f0f",
-  color: "white",
-  fontSize: "16px",
-};
-
-const resetButtonStyle: React.CSSProperties = {
-  padding: "12px",
-  borderRadius: "10px",
-  border: "none",
-  background: "#333",
-  color: "white",
-  fontSize: "16px",
-  cursor: "pointer",
+const styles: Record<string, React.CSSProperties> = {
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(180deg, #111827 0%, #050505 100%)",
+    color: "white",
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  },
+  app: {
+    maxWidth: "430px",
+    margin: "0 auto",
+    minHeight: "100vh",
+    padding: "22px 16px 90px",
+    position: "relative",
+  },
+  header: {
+    padding: "18px 4px 22px",
+  },
+  label: {
+    fontSize: "12px",
+    letterSpacing: "0.12em",
+    color: "#22c55e",
+    fontWeight: 700,
+    marginBottom: "8px",
+  },
+  title: {
+    fontSize: "34px",
+    lineHeight: "1.1",
+    margin: 0,
+    fontWeight: 800,
+  },
+  subtitle: {
+    marginTop: "10px",
+    color: "#cbd5e1",
+    fontSize: "14px",
+    lineHeight: 1.6,
+  },
+  searchBox: {
+    background: "rgba(255,255,255,0.08)",
+    border: "1px solid rgba(255,255,255,0.12)",
+    borderRadius: "24px",
+    padding: "16px",
+    boxShadow: "0 20px 40px rgba(0,0,0,0.25)",
+    backdropFilter: "blur(12px)",
+    marginBottom: "22px",
+  },
+  searchTitle: {
+    fontSize: "15px",
+    fontWeight: 700,
+    marginBottom: "12px",
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "10px",
+  },
+  select: {
+    width: "100%",
+    padding: "12px",
+    borderRadius: "14px",
+    border: "1px solid rgba(255,255,255,0.14)",
+    background: "#0b1220",
+    color: "white",
+    fontSize: "14px",
+    outline: "none",
+  },
+  resetButton: {
+    marginTop: "12px",
+    width: "100%",
+    padding: "13px",
+    borderRadius: "16px",
+    border: "none",
+    background: "#334155",
+    color: "white",
+    fontWeight: 700,
+    cursor: "pointer",
+  },
+  resultHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "14px",
+  },
+  resultLabel: {
+    color: "#94a3b8",
+    fontSize: "12px",
+    margin: 0,
+  },
+  resultCount: {
+    margin: "2px 0 0",
+    fontSize: "24px",
+  },
+  sortBadge: {
+    background: "rgba(34,197,94,0.16)",
+    color: "#86efac",
+    padding: "8px 12px",
+    borderRadius: "999px",
+    fontSize: "12px",
+    fontWeight: 700,
+  },
+  empty: {
+    background: "rgba(255,255,255,0.06)",
+    border: "1px solid rgba(255,255,255,0.12)",
+    borderRadius: "18px",
+    padding: "18px",
+    color: "#cbd5e1",
+    fontSize: "14px",
+  },
+  list: {
+    display: "grid",
+    gap: "14px",
+  },
+  card: {
+    background: "#0f172a",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "24px",
+    padding: "18px",
+    boxShadow: "0 18px 35px rgba(0,0,0,0.28)",
+  },
+  cardTop: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "12px",
+    marginBottom: "14px",
+  },
+  tags: {
+    display: "flex",
+    gap: "6px",
+    marginBottom: "8px",
+  },
+  tag: {
+    background: "rgba(255,255,255,0.08)",
+    color: "#cbd5e1",
+    padding: "5px 9px",
+    borderRadius: "999px",
+    fontSize: "12px",
+  },
+  shopName: {
+    margin: 0,
+    fontSize: "19px",
+    lineHeight: 1.35,
+  },
+  score: {
+    minWidth: "58px",
+    height: "58px",
+    borderRadius: "18px",
+    background: "linear-gradient(135deg, #22c55e, #16a34a)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    fontWeight: 800,
+    boxShadow: "0 12px 25px rgba(34,197,94,0.25)",
+  },
+  scoreNumber: {
+    fontSize: "21px",
+    lineHeight: 1,
+  },
+  scoreText: {
+    fontSize: "11px",
+  },
+  infoRow: {
+    display: "flex",
+    gap: "8px",
+    color: "#e2e8f0",
+    marginBottom: "12px",
+    fontSize: "14px",
+  },
+  reason: {
+    color: "#cbd5e1",
+    lineHeight: 1.7,
+    fontSize: "14px",
+    margin: 0,
+  },
+  mapButton: {
+    marginTop: "16px",
+    display: "block",
+    textAlign: "center",
+    padding: "13px",
+    background: "#2563eb",
+    color: "white",
+    borderRadius: "16px",
+    textDecoration: "none",
+    fontWeight: 800,
+  },
+  bottomNav: {
+    position: "fixed",
+    left: "50%",
+    bottom: "14px",
+    transform: "translateX(-50%)",
+    width: "min(400px, calc(100% - 28px))",
+    background: "rgba(15,23,42,0.95)",
+    border: "1px solid rgba(255,255,255,0.12)",
+    borderRadius: "24px",
+    padding: "10px",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr 1fr",
+    boxShadow: "0 16px 35px rgba(0,0,0,0.35)",
+    backdropFilter: "blur(14px)",
+  },
+  navItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "3px",
+    color: "#94a3b8",
+    fontSize: "12px",
+  },
+  navItemActive: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "3px",
+    color: "#22c55e",
+    fontSize: "12px",
+    fontWeight: 800,
+  },
 };
